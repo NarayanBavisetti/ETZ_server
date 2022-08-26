@@ -3,8 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userData");
 
 const signUpUser = async (req, res) => {
-  const { email, password, } = req.body;
-  console.log(req.body);
+  const { email, password } = req.body;
   if (!email || !password) {
     return res.json({ message: "plz fill all the feilds" });
   }
@@ -21,15 +20,14 @@ const signUpUser = async (req, res) => {
 
     const user = await new User({
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
-    
+
     const isMatch = await user.save();
     if (isMatch) {
       res.status(201).json({
         _id: user.id,
         email: user.email,
-        token: generateToken(user._id),
       });
     }
   } catch (error) {
@@ -46,27 +44,22 @@ const signInUser = async (req, res) => {
   }
 
   try {
-    const userexists = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    // const token = await userexists.generateAuthToken();
-
-    if (!userexists) {
-      return res.status(400).json({ message: "invalid credentials e" });
+    if (!user) {
+      return res.status(400).json({ message: "invalid credentials" });
     }
-    const isMatch = await bcrypt.compare(password, userexists.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
-      token = await userexists.generateAuthToken();
-      res.cookie("jwtoken", token, {
-        expires: new Date(Date.now() + 2589200000),
-        httpOnly: true,
-      });
-
       res.status(201).json({
+        _id: user.id,
+        email: user.email,
         message: "user signin successfully",
+        token: generateToken(user._id),
       });
     } else {
-      return res.status(400).json({ message: "invalid credentials p" });
+      return res.status(400).json({ message: "invalid credentials" });
     }
   } catch (error) {
     console.log(error);
@@ -74,20 +67,19 @@ const signInUser = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-    res.clearCookie("jwtoken", { path: "/" });
-    res.status(200).send("User logout");
-  };
-  
-  const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
-  };
+  res.clearCookie("jwtoken", { path: "/" });
+  res.status(200).send("User logout");
+};
 
+//Generate token
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 
 module.exports = {
-    signUpUser,
-    signInUser,
-    logoutUser,
-  };
-  
+  signUpUser,
+  signInUser,
+  logoutUser,
+};

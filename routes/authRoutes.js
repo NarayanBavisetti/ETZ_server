@@ -5,6 +5,6 @@ const protect  = require("../middleware/authMiddleware")
 
 router.post("/signup",signUpUser);
 router.post("/signin",signInUser);
- router.get("/logout",logoutUser)
+router.get("/logout",logoutUser)
 
 module.exports = router;

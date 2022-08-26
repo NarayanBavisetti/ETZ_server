@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const protect = require('./middleware/authMiddleware');
 require('dotenv').config();
 
 const app = express();
@@ -17,7 +18,7 @@ mongoose.connect(process.env.MONGODB_URL,{
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}))
 app.use(require("./routes/authRoutes"))
-app.get("/", (req,res) => {
+app.get("/",protect, (req,res) => {
     res.send("Hi bhenjo");
 })
 
