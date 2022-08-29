@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
-const PORT = process.env.PORT || 5000;
+const PORT =  5000;
 
 mongoose.connect(process.env.MONGODB_URL,{
     // useNewUrlParser:true,
@@ -15,10 +15,11 @@ mongoose.connect(process.env.MONGODB_URL,{
     // useUnifiedTopology:true
 }).then(() => console.log("DB connected successfully")).catch((err) => console.log(err))
 
+console.log("dddddddddddd")
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}))
 app.use(require("./routes/authRoutes"))
-app.get("/",protect, (req,res) => {
+app.get("/", (req,res) => {
     res.send("Hi bhenjo");
 })
 

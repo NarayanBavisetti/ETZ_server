@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userData");
 
 const signUpUser = async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   if (!email || !password) {
     return res.json({ message: "plz fill all the feilds" });
@@ -36,9 +37,7 @@ const signUpUser = async (req, res) => {
 };
 
 const signInUser = async (req, res) => {
-  let token;
   const { email, password } = req.body;
-  console.log(req.body);
   if (!email || !password) {
     return res.json({ message: "plz fill all the feilds" });
   }
