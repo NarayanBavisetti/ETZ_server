@@ -17,8 +17,12 @@ mongoose.connect(process.env.MONGODB_URL,{
 
 console.log("dddddddddddd")
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}))
-app.use(require("./routes/authRoutes"))
+app.use(express.urlencoded({ extended: false}));
+
+
+app.use('/auth',require("./routes/authRoutes"));
+app.use('/home',require('./routes/homepage'));
+
 app.get("/", (req,res) => {
     res.send("Hi bhenjo");
 })

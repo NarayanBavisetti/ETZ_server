@@ -6,7 +6,7 @@ const signUpUser = async (req, res) => {
   console.log(req.body);
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.json({ message: "plz fill all the feilds" });
+    return res.json({ message: "plz fill all the fields" });
   }
 
   try {
@@ -39,7 +39,7 @@ const signUpUser = async (req, res) => {
 const signInUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.json({ message: "plz fill all the feilds" });
+    return res.json({ message: "plz fill all the fields" });
   }
 
   try {
